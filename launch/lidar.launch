@@ -1,0 +1,10 @@
+<launch>
+
+	<node pkg="urg_node" type="urg_node" name="urg_node" />
+        <node pkg="ROS_tutorials" type="c4_example2" name="c4_example2" />
+	<node pkg="rviz" type="rviz" name="rviz"
+args="-d $(find ROS_tutorials)/rviz/laser.rviz"/>
+
+</launch>
+
+

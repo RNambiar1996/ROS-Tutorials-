@@ -1,0 +1,7 @@
+<launch>
+
+	<node pkg="nmea_tcp_driver" type="nmea_tcp_driver" name="nmea_tcp_driver" />
+        <node pkg="ROS_tutorials" type="gpsTest" name="gpsTest" />
+</launch>
+
+
