@@ -7,14 +7,14 @@ using namespace std;
 class Dynamixel {
 	private:
 		ros::NodeHandle n;
-		ros::Pubslisher pub_n;
+		ros::Publisher pub_n;
 	public:
 		Dynamixel();
 		int moveMotor(double position);
 };
 
 Dynamixel::Dynamixel(){
-	pub_n = n.advertise<std_msgs::Float64>("/tilt_controller/command", 1)
+	pub_n = n.advertise<std_msgs::Float64>("/tilt_controller/command", 1);
 }
 
 int Dynamixel::moveMotor(double position)
