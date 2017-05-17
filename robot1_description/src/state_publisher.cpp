@@ -4,7 +4,7 @@
 #include <tf/transform_broadcaster.h>
 
 int main(int argc, char** argv) {
-    ros::init(argc, argv, "state_publisher");
+    ros::init(argc, argv, "state_publisher_tutorials");
     ros::NodeHandle n;
     ros::Publisher joint_pub = n.advertise<sensor_msgs::JointState>("joint_states", 1);
     tf::TransformBroadcaster broadcaster;
@@ -48,10 +48,6 @@ int main(int argc, char** argv) {
         joint_state.position[9] = 0;
 	joint_state.name[10] ="base_to_wheel4";
         joint_state.position[10] = 0;
-
-
-
-
 
 
         // update transform

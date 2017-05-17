@@ -1,12 +1,7 @@
 cmake_minimum_required(VERSION 2.8.3)
 project(robot1_description)
 
-## Add support for C++11, supported in ROS Kinetic and newer
-# add_definitions(-std=c++11)
-
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
+#required packages
 find_package(catkin REQUIRED COMPONENTS
   robot_state_publisher
   roscpp
@@ -17,18 +12,21 @@ find_package(catkin REQUIRED COMPONENTS
   xacro
 )
 
+catkin_package(
+#  INCLUDE_DIRS include
+#  LIBRARIES gpsTest
+#  CATKIN_DEPENDS roscpp rospy std_msgs
+#  DEPENDS system_lib
+)
 
-add_executable(state_publisher_robot src/state_publisher.cpp)
-add_dependencies(state_publisher_robot src/state_publisher.cpp)
-
-target_link_libraries(state_publisher_robot
-   ${catkin_LIBRARIES}
- )
-
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
-# include_directories(include)
 include_directories(
   ${catkin_INCLUDE_DIRS}
 )
+
+add_executable(state_publisher_tutorials src/state_publisher.cpp)
+add_dependencies(state_publisher_tutorials src/state_publisher.cpp)
+
+target_link_libraries(state_publisher_tutorials
+   ${catkin_LIBRARIES}
+ )
 
