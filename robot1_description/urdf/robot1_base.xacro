@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" 
- 	xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
-    	xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
-    	xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+	xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#sensor"
+	xmlns:controller="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+	xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
 	name="robot1_xacro">
 
 	<xacro:property name="length_wheel" value="0.05" />
@@ -18,6 +18,8 @@
 		</inertial>
 	</xacro:macro>
 
+	<xacro:include filename="$(find robot1_description)/urdf/robot.gazebo" />
+	
 	<link name = "base_footprint">
 		<visual>
 			<geometry>
@@ -27,14 +29,9 @@
 		</visual>
 		<xacro:default_inertial mass="0.0001"/>
 	</link>
-	<xacro:include filename="$(find robot1_description)/urdf/robot.gazebo" />
-
-	<gazebo reference="base_footprint">
-		<material>Gazebo/Green</material>
-		<turnGravityOff>false</turnGravityOff>
-	</gazebo>
 	
 
+	
 	<link name="base_link">
 		<visual>
 			<geometry>
@@ -47,17 +44,11 @@
 		</visual>
 		<collision>
 			<geometry>
-				<box size="0.2 0.3 0.1"/>
+				<box size="0.2 .3 .1"/>
 			</geometry>
 		</collision>
 		<xacro:default_inertial mass="10"/>
 	</link>
-
-	<joint name="base_footprint_joint" type="fixed">
-		<origin xyz="0 0 0"/>
-		<parent link="base_footprint"/>
-		<child link="base_link"/>
-	</joint>
 
 	<link name="wheel_1">
 		<visual>
@@ -132,10 +123,16 @@
 		<xacro:default_inertial mass="1"/>
 	</link>
 
+	<joint name="base_footprint_joint" type="fixed">
+		<origin xyz="0 0 0"/>
+		<parent link="base_footprint"/>
+		<child link="base_link"/>
+	</joint>
+
 	<joint name="base_to_wheel1" type="continuous">
 		<parent link="base_link"/>
 		<child link="wheel_1"/>
-		<origin rpy="1.5707 0 0" xyz="0.1 0.15 0"/>
+		<origin rpy="-1.5707 0 0" xyz="0.1 0.15 0"/>
 		<axis xyz="0 0 1"/>
 	</joint>
 	
@@ -145,23 +142,24 @@
 		<limit effort="100" velocity="100"/>
 		<parent link="base_link"/>
 		<child link="wheel_2"/>
-		<origin rpy="1.5707 0 0" xyz="-0.1 0.15 0"/>
+		<origin rpy="-1.5707 0 0" xyz="-0.1 0.15 0"/>
 	</joint>
 
 	<joint name="base_to_wheel3" type="continuous">
 		<parent link="base_link"/>
 		<child link="wheel_3"/>
 		<axis xyz="0 0 1"/>
-		<origin rpy="1.5707 0 0" xyz="0.1 -0.15 0"/>
+		<origin rpy="-1.5707 0 0" xyz="0.1 -0.15 0"/>
 	</joint>
 	
 	<joint name="base_to_wheel4" type="continuous">
 		<parent link="base_link"/>
 		<child link="wheel_4"/>
 		<axis xyz="0 0 1"/>
-		<origin rpy="1.5707 0 0" xyz="-0.1 -0.15 0"/>
+		<origin rpy="-1.5707 0 0" xyz="-0.1 -0.15 0"/>
 	</joint>
 
+	<!-- Camera -->
 	
 	<link name="camera_link">
 		<collision>
@@ -195,7 +193,8 @@
 		<child link="camera_link"/>
 	</joint>
 
-	
+	<!--Hokuyo laser -->
+
 	<link name="hokuyo_link">
 		<collision>
 			<origin xyz="0 0 0" rpy="0 0 0"/>
@@ -225,6 +224,23 @@
 		<child link="hokuyo_link"/>
 	</joint>
 
+	<!--Drive controller -->
+	<gazebo>
+		<plugin name="skid_steer_driver_controller" 			filename="libgazebo_ros_skid_steer_drive.so">
+			<updateRate>100.0</updateRate>
+			<robotNameSpace>/</robotNameSpace>
+			<leftFrontJoint>base_to_wheel1</leftFrontJoint>
+			<rightFrontJoint>base_to_wheel3</rightFrontJoint>
+			<leftRearJoint>base_to_wheel2</leftRearJoint>
+			<rightRearJoint>base_to_wheel4</rightRearJoint>
+			<wheelSeparation>4</wheelSeparation>
+			<wheelDiameter>0.1</wheelDiameter>
+			<robotBaseFrame>base_link</robotBaseFrame>
+			<torque>1</torque>
+			<topicName>cmd_vel</topicName>
+			<broadcastTF>0</broadcastTF>
+		</plugin>
+	</gazebo>
 
 </robot>
 

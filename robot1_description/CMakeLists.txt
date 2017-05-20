@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   tf
   urdf
   xacro
+	nav_msgs
 )
 
 catkin_package(
@@ -25,8 +26,24 @@ include_directories(
 
 add_executable(state_publisher_tutorials src/state_publisher.cpp)
 add_dependencies(state_publisher_tutorials src/state_publisher.cpp)
-
 target_link_libraries(state_publisher_tutorials
    ${catkin_LIBRARIES}
- )
+)
 
+add_executable(robot_tf_publisher src/tf_broadcaster.cpp)
+add_dependencies(robot_tf_publisher src/tf_broadcaster.cpp)
+target_link_libraries(robot_tf_publisher
+	${catkin_LIBRARIES}
+)
+
+add_executable(tf_listener src/tf_listener.cpp)
+add_dependencies(tf_listener src/tf_listener.cpp)
+target_link_libraries(tf_listener
+	${catkin_LIBRARIES}
+)
+
+add_executable(odometry src/odometry.cpp)
+add_dependencies(odometry src/odometry.cpp)
+target_link_libraries(odometry
+	${catkin_LIBRARIES}
+)

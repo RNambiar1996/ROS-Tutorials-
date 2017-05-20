@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<launch>
+	<param name="/use_sim_time" value="true"/>
+	<include file="$(find gazebo_ros)/launch/willowgarage_world.launch"/>
+	<arg name = "model"/>
+	<param name = "robot_description" command="$(find xacro)/xacro.py $(arg model)"/>
+
+	<node name="state_publisher_tutorials" pkg="robot1_description" type="state_publisher_tutorials"></node>
+		
+	<node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher" output="screen">
+		<param name="publish_frequency" type="double" value="50.0"/>
+	</node>
+
+	<node name="spawn_robot" pkg="gazebo_ros" type="spawn_model" args="-urdf -param robot_description - 0.1 -model robot_model" respawn="false" output="screen"/>
+	<!--
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find robot1_gazebo)/launch/mapping.rviz"/>
+	-->	
+	<node name="slam_gmapping" pkg="gmapping" type="slam_gmapping">
+		<remap from="scan" to="/robot/laser/scan"/>
+		<param name="base_link" value="base_footprint"/>
+	</node>
+
+	<!--<node pkg="tf" type="static_transform_publisher" name="odom_to_map"
+	    args="0.1 0  0  -1.570796327 0 -1.570796327  /map /odom 100" />-->
+
+</launch>
+		
+		
