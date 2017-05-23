@@ -172,32 +172,32 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        camera_link:
+        camera:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        hokuyo_link:
+        hokuyo:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        wheel_1:
+        front_left_wheel:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        wheel_2:
+        front_right_wheel:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        wheel_3:
+        rear_left_wheel:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        wheel_4:
+        rear_right_wheel:
           Alpha: 1
           Show Axes: false
           Show Trail: false
