@@ -238,7 +238,9 @@
     <robotBaseFrame>base_link</robotBaseFrame>
     <torque>1</torque>
     <topicName>cmd_vel</topicName>
-    <broadcastTF>0</broadcastTF>
+    <odometryFrame>odom</odometryFrame>
+    <odometryTopic>odom</odometryTopic>
+    <broadcastTF>1</broadcastTF>
   </plugin>
 </gazebo>
 

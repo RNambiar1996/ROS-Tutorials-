@@ -2,15 +2,16 @@
 
 <launch>
 	<param name="use_sim_time" value="true"/>
-	<remap from="/robot1/laser/scan" to="/scan"/>
+	<remap from="/robot/laser/scan" to="/scan"/>
 	
-	<include file="$(find gazebo_ros)/launch/willowgarage_world.launch"/>
+	<include file="$(find gazebo_ros)/launch/empty_world.launch"/>
 	
 	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
 
 	<param name="robot_description" command="cat $(find robot1_description)/urdf/robot1_base_updated.urdf"/>
 	<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen"/>
 
+	<!--
 	 <node pkg="robot_pose_ekf" type="robot_pose_ekf" name="robot_pose_ekf">
 	    <param name="freq" value="30.0"/>
 	    <param name="sensor_timeout" value="1.0"/>
@@ -19,7 +20,7 @@
 	    <param name="imu_used" value="false"/>
 	    <param name="vo_used" value="false"/>
 	  </node>
-
+	-->
 	<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -z 0.1 -model Robot1 -param robot_description" respawn="false" output="screen"/>
 
 	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find robot1_2dnav)/launch/navigation.rviz"/>

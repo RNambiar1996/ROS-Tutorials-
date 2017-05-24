@@ -1,6 +1,6 @@
 local_costmap:
-  global_frame: /map
-  robot_base_frame: /base_footprint
+  global_frame: odom
+  robot_base_frame: base_link
   update_frequency: 5.0
   publish_frequency: 2.0
   static_map: false
@@ -11,6 +11,7 @@ local_costmap:
   tranform_tolerance: 0.5
   planner_frequency: 1.0
   planner_patiente: 5.0
-#plugins:
-# {name: obstacles, type: "costmal_2d::ObstacleLayer",
-# name: inflation, type: "costmal_2d::InflationLayer"}
+
+plugins:
+ - {name: obstacles_laser,    type: "costmap_2d::ObstacleLayer"}
+ - {name: inflation,    type: "costmap_2d::InflationLayer"}
