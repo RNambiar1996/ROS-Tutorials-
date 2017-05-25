@@ -8,7 +8,11 @@ find_package(catkin REQUIRED COMPONENTS
 	std_msgs
 	geometry_msgs
 	gazebo_ros
+	genmsg
+	actionlib_msgs
+	actionlib
 )
+generate_message(DEPENDENCIES actionlib_msgs)
 
 include_directories(
 	${catkin_INCLUDE_DIRS}
@@ -16,7 +20,7 @@ include_directories(
 
 catkin_package(
 	DEPENDS
-		gazebo_ros
+	gazebo_ros
 	CATKIN_DEPENDS
 	INCLUDE_DIRS
 	LIBRARIES
