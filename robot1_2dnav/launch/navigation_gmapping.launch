@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 
 <launch>
+	<remap from="/robot/laser/scan" to="/scan"/>
+	<arg name="scan_topic" default="/scan"/>
 	<arg name="no_static_map" default="true"/>
 	<arg name="base_global_planner" default="navfn/NavfnROS"/>
 	<arg name="base_local_planner" default="dwa_local_planner/DWAPlannerROS"/>
@@ -8,7 +10,7 @@
 
 	<param name="use_sim_time" value="true"/>
 	
-	<include file="$(find gazebo_ros)/launch/empty_world.launch"/>
+	<include file="$(find gazebo_ros)/launch/willowgarage_world.launch"/>
 	
 	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
 
@@ -21,6 +23,7 @@
 
 	<node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
 		<rosparam file="$(find robot1_2dnav)/params/gmapping_params.yaml" command="load"/>
+		<remap from="scan" to="$(arg scan_topic)"/>
 	</node>
 
 	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
@@ -32,9 +35,6 @@
 
 		<!-- local costmap, needs size -->
 		<rosparam file="$(find robot1_2dnav)/params/local_costmap_params.yaml" command="load" ns="local_costmap" />
-
-		<param name="local_costmap/width" value="10.0"/>
-		<param name="local_costmap/height" value="10.0"/>
 
 		<!-- global costmap with laser, for odom_navigation_demo -->
 		<rosparam file="$(find robot1_2dnav)/params/global_costmap_params.yaml" command="load" ns="global_costmap" if="$(arg no_static_map)"/>
@@ -48,7 +48,8 @@
 
 		<param name="frequency" type="double" value="2.0"/>
 		<param name="goal_aliasing" type="double" value="30.0"/>
-		<rosparam file="$(find robot1_2dnav)/params/exploration_params.yaml"/>
+		<rosparam file="$(find robot1_2dnav)/params/exploration_params.yaml" command="load" ns="explore_costmap" />
+		<rosparam file="$(find robot1_2dnav)/params/costmap_common_params.yaml" command="load" ns="explore_costmap"/>
 	</node>
 
 

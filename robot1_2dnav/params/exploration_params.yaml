@@ -1,4 +1,4 @@
-ns="explore_costmap" subst_value="true">
+explore_costmap: true
            
 footprint: [[-1.5, -1.0], [-1.5, 1.0], [1.5, 1.0], [1.5, -1.1]]
 
@@ -15,17 +15,17 @@ track_unknown_space: true
 
 plugins: 
 
-	- {name: explore_boundary, type: "frontier_exploration::BoundedExploreLayer"}
-	- {name: sensor,           type: "costmap_2d::ObstacleLayer"}
-	- {name: inflation,        type: "costmap_2d::InflationLayer"}
+- {name: explore_boundary, type: "frontier_exploration::BoundedExploreLayer"}
+- {name: sensor,           type: "costmap_2d::ObstacleLayer"}
+- {name: inflation,        type: "costmap_2d::InflationLayer"}
 
 explore_boundary:
-	resize_to_boundary: true
-	frontier_travel_point: closest
+  resize_to_boundary: true
+  frontier_travel_point: closest
 
 sensor:
-	observation_sources: laser
-	laser: {data_type: LaserScan, clearing: true, marking: true, topic: scan, inf_is_valid: true, raytrace_range: $(arg sensor_range), obstacle_range: $(arg sensor_range)}
+  observation_sources: laser
+  laser: {data_type: LaserScan, clearing: true, marking: true, topic: scan, inf_is_valid: true, raytrace_range: 6.0, obstacle_range: 5.5}
 
 inflation:
-	inflation_radius: 1.0
+  inflation_radius: 1.0

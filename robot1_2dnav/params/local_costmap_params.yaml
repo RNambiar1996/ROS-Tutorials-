@@ -11,6 +11,8 @@ local_costmap:
   tranform_tolerance: 0.5
   planner_frequency: 1.0
   planner_patiente: 5.0
+  track_unknown_space: true
+
 
 plugins:
  - {name: obstacles_laser,    type: "costmap_2d::ObstacleLayer"}

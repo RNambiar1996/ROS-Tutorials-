@@ -12,7 +12,6 @@ find_package(catkin REQUIRED COMPONENTS
 	actionlib_msgs
 	actionlib
 )
-generate_message(DEPENDENCIES actionlib_msgs)
 
 include_directories(
 	${catkin_INCLUDE_DIRS}
