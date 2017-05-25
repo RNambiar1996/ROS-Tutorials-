@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+
+<launch>
+	<arg name="no_static_map" default="true"/>
+	<arg name="base_global_planner" default="navfn/NavfnROS"/>
+	<arg name="base_local_planner" default="dwa_local_planner/DWAPlannerROS"/>
+	<!-- <arg name="base_local_planner" default="base_local_planner/TrajectoryPlannerROS"/> -->
+
+	<param name="use_sim_time" value="true"/>
+	
+	<include file="$(find gazebo_ros)/launch/empty_world.launch"/>
+	
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+
+	<param name="robot_description" command="cat $(find robot1_description)/urdf/robot1_base_updated.urdf"/>
+	<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen"/>
+
+	<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -z 0.1 -model Robot1 -param robot_description" respawn="false" output="screen"/>
+
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find robot1_2dnav)/launch/navigation.rviz"/>
+
+	<node pkg="gmapping" type="slam_gmapping" name="slam_gmapping">
+		<rosparam file="$(find robot1_2dnav)/params/gmapping_params.yaml" command="load"/>
+	</node>
+
+	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+		<rosparam file="$(find robot1_2dnav)/params/base_local_planner_params.yaml" command="load"/>
+
+		<!-- observation sources located in costmap_common.yaml -->
+		<rosparam file="$(find robot1_2dnav)/params/costmap_common_params.yaml" command="load" ns="global_costmap" />
+		<rosparam file="$(find robot1_2dnav)/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
+
+		<!-- local costmap, needs size -->
+		<rosparam file="$(find robot1_2dnav)/params/local_costmap_params.yaml" command="load" ns="local_costmap" />
+
+		<param name="local_costmap/width" value="10.0"/>
+		<param name="local_costmap/height" value="10.0"/>
+
+		<!-- global costmap with laser, for odom_navigation_demo -->
+		<rosparam file="$(find robot1_2dnav)/params/global_costmap_params.yaml" command="load" ns="global_costmap" if="$(arg no_static_map)"/>
+		<param name="global_costmap/width" value="1000.0" if="$(arg no_static_map)"/>
+		<param name="global_costmap/height" value="1000.0" if="$(arg no_static_map)"/>
+	</node>
+
+	<node pkg="frontier_exploration" type="explore_client" name="explore_client" output="screen"/>
+
+	<node pkg="frontier_exploration" type="explore_server" name="explore_server" output="screen" >
+
+		<param name="frequency" type="double" value="2.0"/>
+		<param name="goal_aliasing" type="double" value="30.0"/>
+		<rosparam file="$(find robot1_2dnav)/params/exploration_params.yaml"/>
+	</node>
+
+
+</launch> 

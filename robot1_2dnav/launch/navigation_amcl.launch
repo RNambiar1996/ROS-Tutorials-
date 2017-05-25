@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<launch>
+	<arg name="no_static_map" default="true"/>
+
+	<param name="use_sim_time" value="true"/>
+	
+	<include file="$(find gazebo_ros)/launch/empty_world.launch"/>
+	
+	<node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
+
+	<param name="robot_description" command="cat $(find robot1_description)/urdf/robot1_base_updated.urdf"/>
+	<node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen"/>
+
+	<node name="spawn_urdf" pkg="gazebo_ros" type="spawn_model" args="-urdf -z 0.1 -model Robot1 -param robot_description" respawn="false" output="screen"/>
+
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find robot1_2dnav)/launch/navigation.rviz"/>
+
+	<node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+		<rosparam file="$(find robot1_2dnav)/params/base_local_planner_params.yaml" command="load"/>
+
+		<!-- observation sources located in costmap_common.yaml -->
+		<rosparam file="$(find robot1_2dnav)/params/costmap_common_params.yaml" command="load" ns="global_costmap" />
+		<rosparam file="$(find robot1_2dnav)/params/costmap_common_params.yaml" command="load" ns="local_costmap" />
+
+		<!-- local costmap, needs size -->
+		<rosparam file="$(find robot1_2dnav)/params/local_costmap_params.yaml" command="load" ns="local_costmap" />
+
+		<param name="local_costmap/width" value="10.0"/>
+		<param name="local_costmap/height" value="10.0"/>
+
+		<!-- global costmap with laser, for odom_navigation_demo -->
+		<rosparam file="$(find robot1_2dnav)/params/global_costmap_params.yaml" command="load" ns="global_costmap" if="$(arg no_static_map)"/>
+		<param name="global_costmap/width" value="1000.0" if="$(arg no_static_map)"/>
+		<param name="global_costmap/height" value="1000.0" if="$(arg no_static_map)"/>
+	</node>
+
+	<node pkg="amcl" type="amcl" name="amcl" output="screen">
+		<rosparam file="$(find robot1_2dnav)/params/amcl_params.yaml"/>
+	</node>
+
+
+</launch> 
